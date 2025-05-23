@@ -2,7 +2,28 @@
 
 ## Domain Proyek
 
-Polusi udara adalah masalah besar yang menyebabkan banyak orang sakit dan meninggal, terutama akibat penyakit pernapasan seperti PPOK, pneumonia, dan kanker paru-paru. Berdasarkan laporan Global Burden of Disease 2019, setiap hari hampir 2.000 anak meninggal dunia karena kualitas udara yang buruk. Oleh karena itu, penting untuk membuat model yang dapat memprediksi kualitas udara berdasarkan data polutan agar bisa membantu pencegahan dan pengambilan kebijakan yang tepat. Proyek ini menggunakan data konsentrasi polutan dari WHO yang berisi informasi dari berbagai kota di dunia untuk mempelajari pola dan faktor yang memengaruhi kualitas udara.
+Polusi udara merupakan salah satu masalah lingkungan paling serius di dunia. Menurut laporan *Global Burden of Disease 2019*, polusi udara menjadi penyebab lebih dari **6,7 juta kematian** di seluruh dunia setiap tahunnya. Anak-anak sangat rentan terhadap dampaknya, dengan hampir **2.000 anak meninggal setiap hari** akibat paparan udara yang tercemar. (*Source: WHO, GBD 2019*).
+
+Polusi ini berkontribusi terhadap berbagai penyakit pernapasan seperti:
+
+- **Penyakit Paru Obstruktif Kronik (PPOK)**
+- **Pneumonia**
+- **Kanker paru-paru**
+- **Asma dan gangguan pernapasan lainnya**
+
+Selain itu, paparan jangka panjang terhadap polutan seperti **PM2.5**, **PM10**, dan **NO₂** dapat menurunkan harapan hidup dan memperparah kondisi kesehatan masyarakat secara umum.
+
+###  Mengapa Prediksi Kualitas Udara Penting?
+
+Dengan prediksi kualitas udara yang akurat, kita dapat:
+
+- Memberikan **peringatan dini** kepada masyarakat dan pemerintah.
+- Menyusun kebijakan **pengurangan emisi** yang lebih tepat sasaran.
+- Memprioritaskan **wilayah rawan** dengan kualitas udara buruk untuk tindakan lebih lanjut.
+- Membantu **peneliti dan epidemiolog** dalam menghubungkan data polusi dengan tren kesehatan masyarakat.
+---
+
+Melalui proyek ini, diharapkan model machine learning dapat digunakan sebagai alat bantu prediktif untuk pengambilan keputusan dan mitigasi risiko kesehatan akibat polusi udara secara global.
 
 ## Business Understanding
 
@@ -20,7 +41,30 @@ Polusi udara adalah masalah besar yang menyebabkan banyak orang sakit dan mening
 Untuk mencapai tujuan tersebut, beberapa algoritma machine learning akan digunakan, seperti Decision Tree, Random Forest, Gradient Boosting, AdaBoost, CatBoost, XGBoost, dan Extra Trees. Model akan dievaluasi dengan metrik Balanced Accuracy agar hasilnya adil walaupun data tidak seimbang. Penanganan data imbalance dilakukan menggunakan metode SMOTETomek. Selanjutnya, hyperparameter tuning dilakukan pada model terbaik untuk meningkatkan performa.
 
 ## Data Understanding
-Data yang digunakan berasal dari WHO Urban Ambient Air Pollution Dataset yang tersedia secara publik dan dapat diunduh melalui [link WHO](https://www.who.int/data/gho/data/themes/air-pollution). Dataset ini terdiri dari lebih dari 25.000 data latih dan 14.000 data uji dengan fitur utama berupa konsentrasi polutan PM10, PM2.5, NO2, jumlah stasiun pengukur, serta informasi kategorikal seperti nama negara, kota, jenis stasiun, dan label kualitas udara. Selain itu, terdapat fitur hasil rekayasa seperti pm10_tempcov, pm25_tempcov, dan no2_tempcov berdasarkan European Air Quality Index (EAQI). Analisis awal menunjukkan bahwa wilayah Asia Selatan dan Tenggara memiliki kualitas udara yang paling buruk, PM10 dan PM2.5 sangat berkorelasi, dan wilayah dengan kategori udara “Dangerous” memiliki polutan yang jauh lebih tinggi.
+Proyek ini menggunakan data dari **WHO Urban Ambient Air Pollution Dataset**, yang tersedia secara publik melalui tautan berikut:  
+ [WHO Air Pollution Data](https://www.who.int/data/gho/data/themes/air-pollution)
+
+Dataset mencakup data dari berbagai negara dan kota di dunia dengan fitur-fitur seperti:
+
+- Konsentrasi polutan: `PM10`, `PM2.5`, dan `NO2`
+- Informasi lokasi: `negara`, `kota`, `latitude`, `longitude`
+- Karakteristik stasiun: `type_of_station`
+- Label kualitas udara (`air_quality_category`) sesuai standar EAQI
+- Fitur hasil rekayasa berbasis indeks kualitas udara: `pm10_tempcov`, `pm25_tempcov`, `no2_tempcov`
+
+Dataset ini terdiri dari:
+-  **25.000+ data latih**
+-  **14.000+ data uji**
+
+Distribusi geografis yang luas memungkinkan pemodelan prediktif yang **komprehensif dan global** terhadap kualitas udara.
+
+###  Temuan Awal dari Data
+
+- Wilayah **Asia Selatan dan Asia Tenggara** tercatat sebagai area dengan **kualitas udara terburuk**.
+- Konsentrasi **PM10** dan **PM2.5** sangat berkorelasi tinggi.
+- Wilayah dengan kualitas udara **"Dangerous"** memiliki nilai polutan yang jauh lebih tinggi dibandingkan kategori lainnya.
+- Stasiun pengukuran di wilayah **urban** lebih sering melaporkan polusi tinggi.
+
 
 ## Data Preparation
 Proses data preparation dilakukan secara bertahap dan terstruktur agar data siap digunakan untuk pemodelan machine learning dengan hasil yang optimal. Berikut adalah langkah-langkah detail yang dilakukan:
@@ -82,9 +126,10 @@ Pada proyek ini, metrik evaluasi yang digunakan adalah **Balanced Accuracy**. Ba
 
 Rumus Balanced Accuracy adalah:
 
-\[
+$$
 \text{Balanced Accuracy} = \frac{1}{2} \left( \frac{TP}{TP + FN} + \frac{TN}{TN + FP} \right)
-\]
+$$
+
 
 di mana TP = True Positive, FN = False Negative, TN = True Negative, dan FP = False Positive.
 
@@ -140,6 +185,7 @@ Berikut adalah hasil feature importance dari model XGBoost:
 Fitur lainnya seperti konsentrasi NO2, jumlah stasiun pengukur, populasi, dan beberapa fitur lain memiliki kontribusi nol atau sangat kecil dalam model ini.
 
 ## Kesimpulan
+![image](https://github.com/user-attachments/assets/ce2f0f34-c12d-4763-ba01-b14eb55a71cd)
 
 Model XGBoost merupakan pilihan terbaik untuk memprediksi kualitas udara berdasarkan konsentrasi polutan. Faktor PM10 dan PM2.5 menjadi variabel yang paling berpengaruh dalam prediksi, sementara jenis stasiun pengukuran (urban atau rural) dan NO2 juga memberikan kontribusi. Model ini dapat dimanfaatkan untuk peringatan dini serta membantu pembuat kebijakan dalam mengendalikan kualitas udara.
 
