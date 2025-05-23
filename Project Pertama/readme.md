@@ -2,7 +2,7 @@
 
 ## Domain Proyek
 
-Polusi udara merupakan salah satu masalah lingkungan paling serius di dunia. Menurut laporan *Global Burden of Disease 2019*, polusi udara menjadi penyebab lebih dari **6,7 juta kematian** di seluruh dunia setiap tahunnya. Anak-anak sangat rentan terhadap dampaknya, dengan hampir **2.000 anak meninggal setiap hari** akibat paparan udara yang tercemar. (*Source: WHO, GBD 2019*).
+Polusi udara merupakan salah satu masalah lingkungan paling serius di dunia. Menurut laporan *Global Burden of Disease 2019*, polusi udara menjadi penyebab lebih dari **6,7 juta kematian** di seluruh dunia setiap tahunnya. Anak-anak sangat rentan terhadap dampaknya, dengan hampir **2.000 anak meninggal setiap hari** akibat paparan udara yang tercemar. (*World Health Organization, 2020*).
 
 Polusi ini berkontribusi terhadap berbagai penyakit pernapasan seperti:
 
@@ -194,3 +194,5 @@ Model XGBoost merupakan pilihan terbaik untuk memprediksi kualitas udara berdasa
 Untuk pengendalian kualitas udara, disarankan untuk fokus pada pengurangan konsentrasi PM10 dan PM2.5. Selain itu, pemantauan kualitas udara di wilayah urban harus diperkuat karena lebih berpengaruh terhadap kualitas udara. Model machine learning ini juga dapat dioptimalkan lebih lanjut untuk sistem deteksi dini guna mempercepat respons terhadap peningkatan polusi udara.
 
 ---
+## Referensi
+World Health Organization. (2020). Air pollution. Retrieved from https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health
