@@ -49,34 +49,33 @@ Dengan rangkaian proses di atas, data yang awalnya mentah dan tidak lengkap menj
 
 ## Modeling
 
-## Modeling
-
-Dalam proyek ini, berbagai model machine learning digunakan untuk menentukan algoritma terbaik dalam memprediksi kualitas udara. Berikut uraian rinci model-model yang digunakan beserta karakteristik dan kelebihannya:
+Dalam proyek ini, berbagai model machine learning diuji untuk menentukan algoritma terbaik dalam memprediksi kualitas udara. Proses pelatihan menggunakan teknik resampling SMOTETomek untuk mengatasi ketidakseimbangan kelas pada data latih, kemudian model-model berikut dilatih dan dievaluasi:
 
 1. **Decision Tree**  
-   Decision Tree adalah algoritma yang membangun model dalam bentuk struktur pohon keputusan. Model ini mudah dipahami dan diinterpretasi karena memetakan keputusan secara berurutan berdasarkan fitur. Namun, model ini cenderung overfitting jika tidak dilakukan pruning atau pembatasan kedalaman pohon.
+   Model pohon keputusan yang sederhana dan mudah diinterpretasi. Meskipun rentan overfitting, model ini cepat dan efektif untuk baseline.
 
 2. **Random Forest**  
-   Random Forest merupakan ensemble dari banyak Decision Tree yang dilatih dengan teknik bootstrap sampling dan pemilihan fitur acak. Dengan menggabungkan hasil voting dari banyak pohon, model ini mampu mengurangi overfitting dan meningkatkan generalisasi dibanding satu pohon tunggal.
+   Ensemble dari banyak Decision Tree yang menggunakan teknik bootstrap dan pemilihan fitur acak. Model ini mengurangi risiko overfitting dan meningkatkan generalisasi.
 
 3. **Gradient Boosting**  
-   Gradient Boosting adalah metode boosting yang membangun model secara bertahap dengan fokus memperbaiki kesalahan model sebelumnya. Setiap model baru dibangun untuk meminimalkan residual error sehingga performa model meningkat secara iteratif. Algoritma ini sangat efektif namun memerlukan tuning parameter yang tepat untuk mencegah overfitting.
+   Metode boosting yang membangun model secara bertahap dengan fokus memperbaiki kesalahan model sebelumnya. Model ini efektif namun biasanya lebih lambat dibanding ensemble lain.
 
-4. **AdaBoost (Adaptive Boosting)**  
-   AdaBoost adalah teknik boosting yang menggabungkan banyak model sederhana (weak learners), biasanya Decision Stumps, dengan memberikan bobot lebih pada data yang sulit diprediksi. Model ini cukup efektif untuk dataset yang bersih dan memiliki noise rendah.
+4. **AdaBoost**  
+   Boosting yang menggunakan Decision Tree sebagai base learner dengan penyesuaian bobot pada data sulit. Cocok untuk data yang relatif bersih, tetapi kurang tahan terhadap noise.
 
-5. **CatBoost**  
-   CatBoost adalah algoritma boosting yang dirancang khusus untuk menangani data kategorikal dengan lebih baik tanpa perlu encoding kompleks. Selain itu, CatBoost secara otomatis mengatasi masalah overfitting dan bias data sehingga menghasilkan model yang akurat dan stabil.
+5. **Extra Trees**  
+   Mirip Random Forest, namun dengan split yang lebih acak, mempercepat pelatihan dan mengurangi varians model.
 
-6. **XGBoost (Extreme Gradient Boosting)**  
-   XGBoost adalah algoritma gradient boosting yang sangat populer karena kecepatan dan performanya yang tinggi. Algoritma ini menerapkan regularisasi untuk mengurangi overfitting dan mendukung parallel processing sehingga efisien pada dataset besar. XGBoost juga mendukung hyperparameter tuning yang komprehensif.
+6. **XGBoost**  
+   Gradient boosting yang dioptimasi untuk performa tinggi dengan regularisasi bawaan dan efisiensi komputasi. Sering menjadi pilihan utama dalam kompetisi machine learning.
 
-7. **Extra Trees (Extremely Randomized Trees)**  
-   Extra Trees mirip dengan Random Forest tetapi membuat split node secara lebih acak. Ini mengurangi varians model dan mempercepat proses pelatihan. Model ini baik untuk mengatasi data dengan noise dan dapat menghasilkan performa yang kompetitif.
+7. **CatBoost**  
+   Algoritma boosting yang unggul dalam menangani data kategorikal tanpa encoding eksplisit, serta otomatis mengatasi bias dan overfitting.
 
-### Proses Pelatihan  
-Data dibagi menjadi 80% untuk pelatihan dan 20% untuk pengujian. Preprocessing dilakukan dengan `.fit_transform()` pada data latih untuk membangun pipeline preprocessing dan `.transform()` pada data validasi dan uji agar parameter preprocessing tidak terpengaruh oleh data pengujian.
+### Proses Pelatihan dan Evaluasi
 
+- Data latih yang tidak seimbang diresampling menggunakan **SMOTETomek** untuk menggabungkan oversampling (SMOTE) dan undersampling (Tomek links), sehingga distribusi kelas menjadi lebih seimbang.  
+- Model dilatih menggunakan data hasil resampling (`X_train_resampled`, `y_train_resampled`).  
 
 ## Evaluation
 Pada proyek ini, metrik evaluasi yang digunakan adalah **Balanced Accuracy**. Balanced Accuracy dipilih karena dataset yang digunakan sangat tidak seimbang, dengan jumlah data kategori "Safety" jauh lebih banyak dibandingkan kategori "Dangerous". Metrik ini menghitung rata-rata sensitivitas (recall) dari setiap kelas, sehingga memberikan gambaran performa model yang lebih adil pada kelas minoritas.
