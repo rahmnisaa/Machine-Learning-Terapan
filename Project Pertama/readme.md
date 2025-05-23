@@ -1,126 +1,151 @@
-# 🚀 Air Quality Prediction using Machine Learning
+# Laporan Proyek Machine Learning - Rahma Nur Annisa
 
-## 🧠 Domain Proyek
+## Domain Proyek
 
-Polusi udara telah menjadi penyebab utama kematian akibat penyakit pernapasan seperti PPOK, pneumonia, dan kanker paru. Berdasarkan *Global Burden of Disease 2019*, hampir 2.000 anak meninggal setiap hari karena kualitas udara buruk.
+Polusi udara adalah masalah besar yang menyebabkan banyak orang sakit dan meninggal, terutama akibat penyakit pernapasan seperti PPOK, pneumonia, dan kanker paru-paru. Berdasarkan laporan Global Burden of Disease 2019, setiap hari hampir 2.000 anak meninggal dunia karena kualitas udara yang buruk. Oleh karena itu, penting untuk membuat model yang dapat memprediksi kualitas udara berdasarkan data polutan agar bisa membantu pencegahan dan pengambilan kebijakan yang tepat. Proyek ini menggunakan data konsentrasi polutan dari WHO yang berisi informasi dari berbagai kota di dunia untuk mempelajari pola dan faktor yang memengaruhi kualitas udara.
 
-Proyek ini bertujuan untuk:
-- Memprediksi kualitas udara berdasarkan data konsentrasi polutan menggunakan machine learning
-- Mengidentifikasi variabel yang paling berpengaruh terhadap kualitas udara
-- Memberikan rekomendasi kebijakan berbasis data
+## Business Understanding
 
-📚 **Referensi**:
-- GBD 2019 Risk Factors Collaborators. (2020). *The Lancet*, 396(10258), 1223–1249.
-- WHO. *Air pollution*. [Link](https://www.who.int/health-topics/air-pollution)
+### Problem Statements
+1. Model machine learning apa yang paling tepat untuk memprediksi kualitas udara berdasarkan data polutan?  
+2. Faktor apa saja yang paling berpengaruh dalam mempengaruhi prediksi kualitas udara?  
+3. Bagaimana kontribusi masing-masing faktor terhadap hasil prediksi?
+
+### Goals
+1. Menentukan model klasifikasi terbaik untuk memprediksi kualitas udara.  
+2. Mengidentifikasi variabel-variabel paling signifikan yang memengaruhi kualitas udara. 
+3. Menjelaskan peran dan kontribusi setiap variabel dalam prediksi.
+
+### Solution Statements  
+Untuk mencapai tujuan tersebut, beberapa algoritma machine learning akan digunakan, seperti Decision Tree, Random Forest, Gradient Boosting, AdaBoost, CatBoost, XGBoost, dan Extra Trees. Model akan dievaluasi dengan metrik Balanced Accuracy agar hasilnya adil walaupun data tidak seimbang. Penanganan data imbalance dilakukan menggunakan metode SMOTETomek. Selanjutnya, hyperparameter tuning dilakukan pada model terbaik untuk meningkatkan performa.
+
+## Data Understanding
+Data yang digunakan berasal dari WHO Urban Ambient Air Pollution Dataset yang tersedia secara publik dan dapat diunduh melalui [link WHO](https://www.who.int/data/gho/data/themes/air-pollution). Dataset ini terdiri dari lebih dari 25.000 data latih dan 14.000 data uji dengan fitur utama berupa konsentrasi polutan PM10, PM2.5, NO2, jumlah stasiun pengukur, serta informasi kategorikal seperti nama negara, kota, jenis stasiun, dan label kualitas udara. Selain itu, terdapat fitur hasil rekayasa seperti pm10_tempcov, pm25_tempcov, dan no2_tempcov berdasarkan European Air Quality Index (EAQI). Analisis awal menunjukkan bahwa wilayah Asia Selatan dan Tenggara memiliki kualitas udara yang paling buruk, PM10 dan PM2.5 sangat berkorelasi, dan wilayah dengan kategori udara “Dangerous” memiliki polutan yang jauh lebih tinggi.
+
+## Data Preparation
+Proses data preparation dilakukan secara bertahap dan terstruktur agar data siap digunakan untuk pemodelan machine learning dengan hasil yang optimal. Berikut adalah langkah-langkah detail yang dilakukan:
+
+1. **Imputasi Missing Value**  
+   Dataset memiliki beberapa nilai yang hilang (missing values) pada fitur numerik. Untuk menghindari kehilangan data yang penting dan agar model tetap dapat belajar dengan baik, nilai yang hilang diimputasi menggunakan **median** setiap fitur. Median dipilih karena lebih tahan terhadap outlier dibanding rata-rata.
+
+2. **Encoding Data Kategorikal**  
+   Data kategorikal seperti `country_name`, `city`, dan `type_of_station` perlu diubah menjadi format numerik agar bisa diproses oleh algoritma machine learning. Dua metode encoding digunakan:  
+   - **One Hot Encoding**: Untuk fitur yang tidak memiliki urutan (nominal), seperti `country_name` dan `city`, agar setiap kategori diwakili oleh fitur biner.  
+   - **Ordinal Encoding**: Untuk fitur yang memiliki urutan, misalnya `air_quality_category` yang memiliki kelas bertingkat seperti "Safety" dan "Dangerous".
+
+3. **Feature Engineering berdasarkan European Air Quality Index (EAQI)**  
+   Fitur baru dibuat berdasarkan rumus dan kategori EAQI untuk menangkap informasi tambahan terkait kondisi kualitas udara. Contohnya adalah `pm10_tempcov`, `pm25_tempcov`, dan `no2_tempcov` yang memberikan nilai pembobotan terhadap konsentrasi polutan sesuai standar EAQI.
+
+4. **Penanganan Data Imbalance dengan SMOTETomek**  
+   Dataset memiliki ketidakseimbangan kelas yang sangat besar, di mana kelas “Safety” jauh lebih banyak dibandingkan kelas “Dangerous”. Untuk mengatasi ini, digunakan teknik kombinasi **SMOTE (Synthetic Minority Over-sampling Technique)** dan **Tomek Links**:  
+   - SMOTE berfungsi menambah data sintetis pada kelas minoritas agar seimbang dengan kelas mayoritas.  
+   - Tomek Links menghilangkan data yang saling bertolak belakang dan menyebabkan overlap antara kelas sehingga data lebih bersih dan tegas.
+
+5. **Preprocessing Terpisah antara Data Train dan Data Test**  
+   Semua proses imputasi, encoding, feature engineering, dan penanganan imbalance hanya diterapkan pada **data train** menggunakan metode `.fit_transform()` agar model tidak "melihat" informasi dari data test. Pada data validasi dan data test, proses hanya dilakukan dengan `.transform()` menggunakan parameter yang sudah didapat dari data train. Ini penting untuk menghindari kebocoran data (data leakage) yang dapat membuat evaluasi model menjadi tidak valid.
+
+Dengan rangkaian proses di atas, data yang awalnya mentah dan tidak lengkap menjadi bersih, lengkap, seimbang, dan siap digunakan untuk proses pemodelan machine learning.
+
+
+## Modeling
+
+## Modeling
+
+Dalam proyek ini, berbagai model machine learning digunakan untuk menentukan algoritma terbaik dalam memprediksi kualitas udara. Berikut uraian rinci model-model yang digunakan beserta karakteristik dan kelebihannya:
+
+1. **Decision Tree**  
+   Decision Tree adalah algoritma yang membangun model dalam bentuk struktur pohon keputusan. Model ini mudah dipahami dan diinterpretasi karena memetakan keputusan secara berurutan berdasarkan fitur. Namun, model ini cenderung overfitting jika tidak dilakukan pruning atau pembatasan kedalaman pohon.
+
+2. **Random Forest**  
+   Random Forest merupakan ensemble dari banyak Decision Tree yang dilatih dengan teknik bootstrap sampling dan pemilihan fitur acak. Dengan menggabungkan hasil voting dari banyak pohon, model ini mampu mengurangi overfitting dan meningkatkan generalisasi dibanding satu pohon tunggal.
+
+3. **Gradient Boosting**  
+   Gradient Boosting adalah metode boosting yang membangun model secara bertahap dengan fokus memperbaiki kesalahan model sebelumnya. Setiap model baru dibangun untuk meminimalkan residual error sehingga performa model meningkat secara iteratif. Algoritma ini sangat efektif namun memerlukan tuning parameter yang tepat untuk mencegah overfitting.
+
+4. **AdaBoost (Adaptive Boosting)**  
+   AdaBoost adalah teknik boosting yang menggabungkan banyak model sederhana (weak learners), biasanya Decision Stumps, dengan memberikan bobot lebih pada data yang sulit diprediksi. Model ini cukup efektif untuk dataset yang bersih dan memiliki noise rendah.
+
+5. **CatBoost**  
+   CatBoost adalah algoritma boosting yang dirancang khusus untuk menangani data kategorikal dengan lebih baik tanpa perlu encoding kompleks. Selain itu, CatBoost secara otomatis mengatasi masalah overfitting dan bias data sehingga menghasilkan model yang akurat dan stabil.
+
+6. **XGBoost (Extreme Gradient Boosting)**  
+   XGBoost adalah algoritma gradient boosting yang sangat populer karena kecepatan dan performanya yang tinggi. Algoritma ini menerapkan regularisasi untuk mengurangi overfitting dan mendukung parallel processing sehingga efisien pada dataset besar. XGBoost juga mendukung hyperparameter tuning yang komprehensif.
+
+7. **Extra Trees (Extremely Randomized Trees)**  
+   Extra Trees mirip dengan Random Forest tetapi membuat split node secara lebih acak. Ini mengurangi varians model dan mempercepat proses pelatihan. Model ini baik untuk mengatasi data dengan noise dan dapat menghasilkan performa yang kompetitif.
+
+### Proses Pelatihan  
+Data dibagi menjadi 80% untuk pelatihan dan 20% untuk pengujian. Preprocessing dilakukan dengan `.fit_transform()` pada data latih untuk membangun pipeline preprocessing dan `.transform()` pada data validasi dan uji agar parameter preprocessing tidak terpengaruh oleh data pengujian.
+
+
+## Evaluation
+Pada proyek ini, metrik evaluasi yang digunakan adalah **Balanced Accuracy**. Balanced Accuracy dipilih karena dataset yang digunakan sangat tidak seimbang, dengan jumlah data kategori "Safety" jauh lebih banyak dibandingkan kategori "Dangerous". Metrik ini menghitung rata-rata sensitivitas (recall) dari setiap kelas, sehingga memberikan gambaran performa model yang lebih adil pada kelas minoritas.
+
+Rumus Balanced Accuracy adalah:
+
+\[
+\text{Balanced Accuracy} = \frac{1}{2} \left( \frac{TP}{TP + FN} + \frac{TN}{TN + FP} \right)
+\]
+
+di mana TP = True Positive, FN = False Negative, TN = True Negative, dan FP = False Positive.
+
+Berikut hasil Balanced Accuracy dari model-model yang diuji:
+
+| Model             | Balanced Accuracy |
+|-------------------|-------------------|
+| Decision Tree     | 0.9013            |
+| Random Forest     | 0.9013            |
+| Gradient Boosting | 0.9010            |
+| AdaBoost          | 0.9013            |
+| Extra Trees       | 0.9013            |
+| CatBoost          | 0.9013            |
+| **XGBoost**       | **0.9637**        |
+
+Dari tabel di atas, dapat dilihat bahwa semua model selain XGBoost memiliki performa yang hampir sama dengan Balanced Accuracy sekitar 0.90. Namun, XGBoost menonjol dengan Balanced Accuracy sebesar 0.9637, menunjukkan kemampuan prediksi yang jauh lebih baik dan lebih seimbang antara kelas mayoritas dan minoritas.
+
+Oleh karena itu, XGBoost dipilih sebagai model terbaik untuk tugas prediksi kualitas udara ini karena tidak hanya memiliki akurasi yang tinggi tetapi juga stabil dan mampu menangani imbalance data dengan baik.
+
+### Post Analysis: Feature Importance
+
+Setelah model XGBoost terpilih sebagai model terbaik, dilakukan analisis terhadap pentingnya fitur (feature importance) untuk memahami variabel mana yang paling berkontribusi terhadap prediksi kualitas udara.
+
+Berikut adalah hasil feature importance dari model XGBoost:
+
+- **who_region**: 0.5224  
+  Fitur ini merupakan variabel dengan pengaruh terbesar, menunjukkan bahwa wilayah WHO sangat memengaruhi kualitas udara. Faktor geografis regional berperan penting dalam variasi kualitas udara.
+
+- **pm10_concentration**: 0.1799  
+  Konsentrasi PM10 merupakan polutan utama yang berkontribusi signifikan terhadap prediksi kualitas udara.
+
+- **latitude**: 0.1370  
+  Lokasi geografis (garis lintang) juga berpengaruh besar, kemungkinan terkait dengan kondisi iklim dan aktivitas lokal.
+
+- **pm25_concentration**: 0.0147  
+  Konsentrasi PM2.5 memiliki kontribusi kecil tetapi tetap relevan.
+
+- **longitude**: 0.0144  
+  Garis bujur memberikan kontribusi minor terhadap prediksi.
+
+- **pm25_tempcov**: 0.0599  
+  Fitur hasil rekayasa fitur yang berkaitan dengan variasi suhu dan PM2.5 juga berperan.
+
+- **PM10_Category**: 0.0519  
+  Kategori kualitas PM10 yang dipakai sebagai fitur tambahan memberikan kontribusi pada model.
+
+- **who_ms**: 0.0119  
+  Fitur WHO metadata tambahan memberikan pengaruh kecil.
+
+- **no2_tempcov**: 0.0079  
+  Variasi suhu terhadap NO2 memberikan kontribusi yang sangat kecil.
+
+Fitur lainnya seperti konsentrasi NO2, jumlah stasiun pengukur, populasi, dan beberapa fitur lain memiliki kontribusi nol atau sangat kecil dalam model ini.
+
+## Kesimpulan
+
+Model XGBoost merupakan pilihan terbaik untuk memprediksi kualitas udara berdasarkan konsentrasi polutan. Faktor PM10 dan PM2.5 menjadi variabel yang paling berpengaruh dalam prediksi, sementara jenis stasiun pengukuran (urban atau rural) dan NO2 juga memberikan kontribusi. Model ini dapat dimanfaatkan untuk peringatan dini serta membantu pembuat kebijakan dalam mengendalikan kualitas udara.
+
+## Rekomendasi
+
+Untuk pengendalian kualitas udara, disarankan untuk fokus pada pengurangan konsentrasi PM10 dan PM2.5. Selain itu, pemantauan kualitas udara di wilayah urban harus diperkuat karena lebih berpengaruh terhadap kualitas udara. Model machine learning ini juga dapat dioptimalkan lebih lanjut untuk sistem deteksi dini guna mempercepat respons terhadap peningkatan polusi udara.
 
 ---
-
-## 🎯 Business Understanding
-
-### 📌 Problem Statements
-1. Model apa yang terbaik untuk memprediksi kualitas udara berdasarkan data polutan?
-2. Apa saja faktor paling signifikan yang memengaruhi prediksi kualitas udara?
-3. Bagaimana kontribusi masing-masing faktor terhadap prediksi?
-
-### 🎯 Goals
-1. Menentukan model klasifikasi terbaik
-2. Mengidentifikasi variabel signifikan
-3. Menjelaskan kontribusi tiap variabel
-
-### 🛠 Solution Statements
-- Menggunakan beberapa algoritma: Decision Tree, Random Forest, Gradient Boosting, AdaBoost, CatBoost, XGBoost, dan Extra Trees
-- Evaluasi menggunakan **Balanced Accuracy**
-- Penanganan data imbalance dengan **SMOTETomek**
-- Hyperparameter tuning untuk model terbaik
-
----
-
-## 📊 Data Understanding
-
-- 📁 Dataset: WHO Urban Ambient Air Pollution Dataset ([link](https://www.who.int/data/gho/data/themes/air-pollution))
-- 🔢 Jumlah data latih: 25.999 baris
-- 🔢 Jumlah data uji: 14.005 baris
-
-### 📌 Fitur penting
-- **Numerik**: pm10_concentration, pm25_concentration, no2_concentration, number_of_station
-- **Kategorik**: country_name, city, type_of_station, air_quality_category (label)
-- **Feature Engineering**: pm10_tempcov, pm25_tempcov, no2_tempcov (berdasarkan EAQI)
-
-### 📈 Exploratory Data Analysis
-- Wilayah Asia Selatan & Tenggara = kualitas udara paling buruk
-- PM10 dan PM2.5 sangat berkorelasi (r = 0.89)
-- Wilayah dengan kualitas “Dangerous” memiliki konsentrasi polutan jauh lebih tinggi
-
----
-
-## 🧹 Data Preparation
-
-Langkah-langkah:
-1. **Imputasi** missing value dengan median
-2. **Encoding** kategorikal: One Hot & ordinal encoding
-3. **Feature Engineering** berdasarkan European Air Quality Index (EAQI)
-4. **SMOTETomek** untuk menangani class imbalance
-5. Preprocessing dilakukan hanya pada data train untuk menghindari data leakage
-
----
-
-## 🧪 Modeling
-
-Model yang diuji:
-- Decision Tree
-- Random Forest
-- Gradient Boosting
-- AdaBoost
-- CatBoost
-- XGBoost
-- Extra Trees
-
-Splitting data: 80% train, 20% test  
-Preprocessing dilakukan dengan `.fit_transform()` untuk train dan `.transform()` untuk valid/test
-
----
-
-## 📏 Evaluation
-
-### 🎯 Metrik: **Balanced Accuracy**
-
-Balanced Accuracy digunakan karena dataset imbalance:
-- 25.921 Safety
-- 78 Dangerous
-
-| Model         | Balanced Accuracy (%) |
-|---------------|------------------------|
-| XGBoost       | **96.37**              |
-| Model lain    | [Lihat notebook]       |
-
-📌 **Model terbaik:** XGBoost  
-📌 **Alasan:** Akurasi tinggi dan stabil
-
----
-
-## 🧠 Feature Importance
-
-- 🔥 PM10 dan PM2.5 adalah faktor paling signifikan
-- 🌆 Jenis stasiun (urban > rural) juga berkontribusi
-- NO2 berpengaruh namun lebih kecil dibanding dua lainnya
-
----
-
-## 📌 Conclusion
-
-- XGBoost adalah model terbaik dalam memprediksi kualitas udara
-- PM10 dan PM2.5 adalah faktor paling berpengaruh
-- Model dapat digunakan untuk peringatan dini dan kebijakan publik
-
----
-
-## ✅ Rekomendasi
-
-- 🎯 Fokus pengendalian pada **PM10 dan PM2.5**
-- 📍 Perkuat pemantauan di wilayah **urban**
-- 📊 Optimalkan model ML untuk sistem **deteksi dini**
-
----
-
-## 📁 Struktur Repo
-
