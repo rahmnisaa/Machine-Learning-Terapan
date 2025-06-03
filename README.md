@@ -43,7 +43,7 @@ Dataset yang digunakan berasal dari Kaggle yang dapat diakses pada [https://www.
 ### Ukuran Data:
 
 * `anime.csv`: 12,294 entri
-* `rating.csv`: 7,813,730 entri
+* `rating.csv`: 7,813,737 entri
 
 ### Fitur-fitur dalam `anime.csv`:
 
@@ -62,6 +62,13 @@ Dataset yang digunakan berasal dari Kaggle yang dapat diakses pada [https://www.
 * Distribusi rating membentuk kurva normal dengan puncak di rating **6–7**.
 * Distribusi members menunjukkan ketimpangan tinggi, hanya sebagian kecil anime yang sangat populer.
 
+### Fitur-fitur dalam `rating.csv`:
+| Nama Kolom | Deskripsi                                                                 |
+|------------|---------------------------------------------------------------------------|
+| user_id    | ID pengguna yang dihasilkan secara acak dan tidak dapat diidentifikasi.  |
+| anime_id   | ID anime yang telah diberi rating oleh pengguna.                         |
+| rating     | Nilai rating dari 1 hingga 10 yang diberikan pengguna.                   |
+|            | Nilai -1 berarti pengguna telah menonton anime tersebut tetapi tidak memberi rating. |
 
 ---
 
@@ -145,18 +152,19 @@ def get_recommendations(title):
 ```
 Pada model yang dibangun pada project ini, dengan memberikan input judul anime Naruto, maka model akan memberikan 10 rekomendasi anime berikut
 
-| Rank | Name | Genre | Type | Episodes | Rating | Predicted Rating | Members |
-|------|------|-------|------|----------|--------|------------------|---------|
-| 1 | Fairy Tail | Action, Adventure, Comedy, Fantasy, Magic, Shounen | TV | 175 | 8.22 | 10.00 | 584590 |
-| 2 | No Game No Life | Adventure, Comedy, Ecchi, Fantasy, Game, Supernatural | TV | 12 | 8.47 | 9.99 | 602291 |
-| 3 | Shigatsu wa Kimi no Uso | Drama, Music, Romance, School, Shounen | TV | 22 | 8.92 | 9.80 | 416397 |
-| 4 | Fairy Tail (2014) | Action, Adventure, Comedy, Fantasy, Magic, Shounen | TV | 102 | 8.25 | 9.80 | 255076 |
-| 5 | Kimi no Na wa. | Drama, Romance, School, Supernatural | Movie | 1 | 9.37 | 9.79 | 200630 |
-| 6 | Tengen Toppa Gurren Lagann | Action, Adventure, Comedy, Mecha, Sci-Fi | TV | 27 | 8.78 | 9.72 | 562962 |
-| 7 | Fullmetal Alchemist: Brotherhood | Action, Adventure, Drama, Fantasy, Magic, Military, Shounen | TV | 64 | 9.26 | 9.71 | 793665 |
-| 8 | Gintama° | Action, Comedy, Historical, Parody, Samurai, Sci-Fi | TV | 51 | 9.25 | 9.69 | 114262 |
-| 9 | Bleach | Action, Comedy, Shounen, Super Power, Supernatural | TV | 366 | 7.95 | 9.62 | 624055 |
-| 10 | Shijou Saikyou no Deshi Kenichi | Action, Comedy, Martial Arts, School, Shounen | TV | 50 | 8.25 | 9.61 | 129112 |
+| Rank | Name | Genre | Type | Episodes | Rating | Members |
+|------|------|-------|------|----------|--------|---------|
+| 1 | Naruto: Shippuuden | Action, Comedy, Martial Arts, Shounen, Super Power | TV | 0 | 7.94 | 533578 |
+| 2 | Naruto x UT | Action, Comedy, Martial Arts, Shounen, Super Power | OVA | 1 | 7.58 | 23465 |
+| 3 | Rekka no Honoo | Action, Adventure, Martial Arts, Shounen, Super Power | TV | 42 | 7.44 | 35258 |
+| 4 | Naruto Soyokazeden Movie | Action, Comedy, Martial Arts, Shounen, Super Power | Movie | 1 | 7.11 | 25174 |
+| 5 | Boruto: Naruto the Movie | Action, Comedy, Martial Arts, Shounen, Super Power | Movie | 1 | 8.03 | 74690 |
+| 6 | Naruto: Shippuuden Movie 4 | Action, Comedy, Martial Arts, Shounen, Super Power | Movie | 1 | 7.53 | 84527 |
+| 7 | Naruto: Shippuuden Movie 3 | Action, Comedy, Martial Arts, Shounen, Super Power | Movie | 1 | 7.50 | 83515 |
+| 8 | Project ARMS | Action, Martial Arts, Super Power | TV | 26 | 7.15 | 6903 |
+| 9 | Kurokami The Animation | Action, Martial Arts, Super Power | TV | 23 | 7.29 | 72750 |
+| 10 | Wolverine | Action, Martial Arts, Super Power | TV | 12 | 6.24 | 14989 |
+
 
 ### 2. Collaborative Filtering (Matrix Factorization - SVD)
 
@@ -188,18 +196,20 @@ rmse = accuracy.rmse(predictions)
 Pada model yang dibangun pada project ini, user_id 1 diberikan rekomendasi 10 anime berikut
 
 
-| Rank | Name | Genre | Type | Episodes | Rating | Members |
-|------|------|-------|------|----------|--------|---------|
-| 1 | Naruto: Shippuuden | Action, Comedy, Martial Arts, Shounen, Super Power | TV | 0 | 7.94 | 533578 |
-| 2 | Naruto x UT | Action, Comedy, Martial Arts, Shounen, Super Power | OVA | 1 | 7.58 | 23465 |
-| 3 | Rekka no Honoo | Action, Adventure, Martial Arts, Shounen, Super Power | TV | 42 | 7.44 | 35258 |
-| 4 | Naruto Soyokazeden Movie | Action, Comedy, Martial Arts, Shounen, Super Power | Movie | 1 | 7.11 | 25174 |
-| 5 | Boruto: Naruto the Movie | Action, Comedy, Martial Arts, Shounen, Super Power | Movie | 1 | 8.03 | 74690 |
-| 6 | Naruto: Shippuuden Movie 4 | Action, Comedy, Martial Arts, Shounen, Super Power | Movie | 1 | 7.53 | 84527 |
-| 7 | Naruto: Shippuuden Movie 3 | Action, Comedy, Martial Arts, Shounen, Super Power | Movie | 1 | 7.50 | 83515 |
-| 8 | Project ARMS | Action, Martial Arts, Super Power | TV | 26 | 7.15 | 6903 |
-| 9 | Kurokami The Animation | Action, Martial Arts, Super Power | TV | 23 | 7.29 | 72750 |
-| 10 | Wolverine | Action, Martial Arts, Super Power | TV | 12 | 6.24 | 14989 |
+| Rank | Name                             | Genre                                                                 | Type  | Episodes | Rating | Predicted Rating | Members |
+|------|----------------------------------|------------------------------------------------------------------------|--------|----------|--------|------------------|---------|
+| 1    | Kimi no Na wa.                  | Drama, Romance, School, Supernatural                                 | Movie  | 1        | 9.37   | 10.00            | 200630  |
+| 2    | Fairy Tail                      | Action, Adventure, Comedy, Fantasy, Magic, Shounen                   | TV     | 175      | 8.22   | 10.00            | 584590  |
+| 3    | Fairy Tail (2014)               | Action, Adventure, Comedy, Fantasy, Magic, Shounen                   | TV     | 102      | 8.25   | 9.83             | 255076  |
+| 4    | Tengen Toppa Gurren Lagann      | Action, Adventure, Comedy, Mecha, Sci-Fi                             | TV     | 27       | 8.78   | 9.77             | 562962  |
+| 5    | Fullmetal Alchemist: Brotherhood| Action, Adventure, Drama, Fantasy, Magic, Military, Shounen          | TV     | 64       | 9.26   | 9.76             | 793665  |
+| 6    | Major: World Series             | Comedy, Drama, Sports                                                | OVA    | 2        | 8.50   | 9.74             | 13405   |
+| 7    | Katekyo Hitman Reborn!          | Action, Comedy, Shounen, Super Power                                 | TV     | 203      | 8.37   | 9.73             | 258103  |
+| 8    | Gintama°                        | Action, Comedy, Historical, Parody, Samurai, Sci-Fi                  | TV     | 51       | 9.25   | 9.71             | 114262  |
+| 9    | Dragon Ball Z                   | Action, Adventure, Comedy, Fantasy, Martial Arts, Shounen, Super Power | TV     | 291      | 8.32   | 9.69             | 375662  |
+| 10   | Ginga Eiyuu Densetsu            | Drama, Military, Sci-Fi, Space                                       | OVA    | 110      | 9.11   | 9.68             | 80679   |
+
+
 
 
 ---
@@ -228,7 +238,7 @@ $$
 RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n}(\hat{r}_i - r_i)^2}
 $$
 
-* Hasil evaluasi: **RMSE = 1.1328** (semakin rendah semakin baik)
+* Hasil evaluasi: **RMSE = 1.1320** (semakin rendah semakin baik)
 
 ---
 
